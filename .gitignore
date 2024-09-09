@@ -362,3 +362,4 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /POC_input/vcpkg_installed
+/POC_controlGameSpeed/vcpkg_installed
