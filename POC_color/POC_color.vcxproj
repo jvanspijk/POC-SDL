@@ -137,7 +137,6 @@
   <ItemGroup>
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Demo.cpp" />
-    <ClCompile Include="RGBA.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

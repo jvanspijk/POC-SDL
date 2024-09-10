@@ -1,27 +1,25 @@
 #include "Color.h"
-#include "RgbaColorRepresentation.h"
 #include "HexColorRepresentation.h"
 #include "PredefinedColorRepresentation.h"
 
-// Private constructor
-Color::Color(const IColorRepresentation& colorRepresentation) : rgba(colorRepresentation.toRGBA()) {}
+Color::Color(unsigned int r, unsigned int g, unsigned int b, unsigned int a)
+    : rgba(r, g, b, a) {}
 
-// Factory method for RGBA
+Color::Color(const RGBA& rgba)
+    : rgba(rgba) {}
+
 Color Color::fromRGBA(unsigned int r, unsigned int g, unsigned int b, unsigned int a) {
-    return Color(RgbaColorRepresentation(r, g, b, a));
+    return Color(r, g, b, a);
 }
 
-// Factory method for Hex
 Color Color::fromHex(const std::string& hexCode) {
-    return Color(HexColorRepresentation(hexCode));
+    HexColorRepresentation hexColorRepresentation(hexCode);
+    RGBA rgba = hexColorRepresentation.toRGBA();
+    return Color(rgba);
 }
 
-// Factory method for Predefined colors
 Color Color::fromPredefined(const std::string& name) {
-    return Color(PredefinedColorRepresentation(name));
-}
-
-// Get RGBA value
-RGBA Color::getRGBA() const {
-    return rgba;
+    PredefinedColorRepresentation predefinedColorRepresentation(name);
+    RGBA rgba = predefinedColorRepresentation.toRGBA();
+    return Color(rgba);
 }
