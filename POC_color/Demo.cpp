@@ -18,8 +18,8 @@ int main() {
     std::cout << "RGBA from predefined 'Blue': [" << rgba3.r << ", " << rgba3.g << ", " << rgba3.b << ", " << rgba3.a << "]" << std::endl;
 
     //Invalid colors:
-    Color rgbaColor2 = Color::fromRGBA(-20, 0, 0, 128);
-    std::cout << "RGBA from RGBA2: [" << rgbaColor2.rgba.r << ", " << rgbaColor2.rgba.g << ", " << rgbaColor2.rgba.b << ", " << rgbaColor2.rgba.a << "]" << std::endl;
+    //Color rgbaColor2 = Color::fromRGBA(-20, 0, 0, 128);
+    //std::cout << "RGBA from RGBA2: [" << rgbaColor2.rgba.r << ", " << rgbaColor2.rgba.g << ", " << rgbaColor2.rgba.b << ", " << rgbaColor2.rgba.a << "]" << std::endl;
     //Color hexColor2 = Color::fromHex("lol");
     //Color predefinedColor2 = Color::fromPredefined("Bellow");
 
