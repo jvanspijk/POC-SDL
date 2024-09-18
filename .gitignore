@@ -363,3 +363,5 @@ MigrationBackup/
 FodyWeavers.xsd
 /POC_input/vcpkg_installed
 /POC_controlGameSpeed/vcpkg_installed
+/POC_soundfont/vcpkg_installed
+*.sf2
