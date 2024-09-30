@@ -25,11 +25,13 @@ int main(int argc, char* args[]) {
     
     //SDL mixer does not support playing two music tracks simultaneosly
     //We load it in as 2 soundeffects as a hacky workaround
-    audioManager.loadSoundEffect("Synthwave3_layer1.ogg", "layer1");
-    audioManager.loadSoundEffect("Synthwave3_layer2.ogg", "layer2");
+    audioManager.loadSoundEffect("Synthwave_layer1.ogg", "layer1");
+    audioManager.loadSoundEffect("Synthwave_layer2.ogg", "layer2");
     audioManager.playSoundEffect("layer1", -1);
     audioManager.playSoundEffect("layer2", -1);
+    audioManager.mute("layer1");
     audioManager.mute("layer2");
+    audioManager.fadeIn("layer1", 2.0f); //Fade in does not work, neither does fadeout..
 
     //Ugly to pass audiomanager as a dependency for inputhandler but it will have to do for now
     InputHandler inputHandler(&audioManager);
