@@ -130,10 +130,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AudioManager.cpp" />
+    <ClCompile Include="GameLoop.cpp" />
+    <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="LayeredAudio.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AudioManager.h" />
+    <ClInclude Include="GameLoop.h" />
+    <ClInclude Include="InputHandler.h" />
     <ClInclude Include="LayeredAudio.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="Renderer.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Synthwave3_layer1.ogg" />
+    <None Include="Synthwave3_layer2.ogg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
