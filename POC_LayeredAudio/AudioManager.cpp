@@ -29,22 +29,24 @@ void AudioManager::playSoundEffect(const std::string& id, int loops) {
     }
 }
 
-void AudioManager::fadeIn(const std::string& id, int fadeInSeconds) {
+void AudioManager::fadeIn(const std::string& id, float fadeInSeconds) {
     if (soundEffects.find(id) != soundEffects.end()) {
         int channel = playingChannels[id];
 
         Mix_Volume(channel, MIX_MAX_VOLUME);
-        int fadeInMilliseconds = fadeInSeconds * 1000;
+        //The following code does nothing:
+        int fadeInMilliseconds = int(fadeInSeconds * 1000);
         Mix_FadeInChannel(channel, nullptr, -1, fadeInMilliseconds);
     }
 }
 
-void AudioManager::fadeOut(const std::string& id, int fadeOutSeconds) {
+void AudioManager::fadeOut(const std::string& id, float fadeOutSeconds) {
     if (soundEffects.find(id) != soundEffects.end()) {
         int channel = playingChannels[id];
 
         Mix_Volume(channel, 0);
-        int fadeOutMilliseconds = fadeOutSeconds * 1000;
+        //The following code does nothing:
+        int fadeOutMilliseconds = int(fadeOutSeconds * 1000);
         Mix_FadeOutChannel(channel, fadeOutMilliseconds);
     }
 }

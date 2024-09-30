@@ -12,8 +12,8 @@ public:
 
     bool loadSoundEffect(const std::string& filePath, const std::string& id);
     void playSoundEffect(const std::string& id, int amountOfLoops);
-    void fadeIn(const std::string& id, int fadeInSeconds);
-    void fadeOut(const std::string& id, int fadeOutSeconds);
+    void fadeIn(const std::string& id, float fadeInSeconds);
+    void fadeOut(const std::string& id, float fadeOutSeconds);
     void mute(const std::string& id);
     void close();
     std::map<std::string, int> playingChannels;
