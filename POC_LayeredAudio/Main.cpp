@@ -11,7 +11,10 @@ int main(int argc, char* args[]) {
         return -1;
     }
 
-    window = SDL_CreateWindow("Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_SHOWN);
+    const int width = 1366;
+    const int height = 768;
+
+    window = SDL_CreateWindow("Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN);
 
     if (window == nullptr) {
         return -1;

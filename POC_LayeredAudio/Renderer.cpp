@@ -14,18 +14,18 @@ Renderer::~Renderer() {
     SDL_DestroyRenderer(renderer);
 }
 
-void Renderer::clearScreen(bool applyRainbowEffect, float deltaTime) {
+void Renderer::clearScreen(bool applyRainbowEffect, float deltaTime, float bpm) {
     static int colorIndex = 0;
     static float elapsedTime = 0.0f;
 
     if (applyRainbowEffect) {
         elapsedTime += deltaTime;
 
-        // Change color every beat (based on BPM)
-        float bpm = 108.0f;
-        float timePerBeat = 60.0f / bpm;
+        // Change color every beat (based on BPM)        
+        const float timePerBeat = 60.0f / bpm;
+        const float tolerance = timePerBeat * 0.03f;  // 3% tolerance
 
-        if (elapsedTime >= timePerBeat) {
+        if (elapsedTime >= (timePerBeat - tolerance)) {
             elapsedTime = 0.0f;
             colorIndex = (colorIndex + 1) % 12;
         }
@@ -35,7 +35,7 @@ void Renderer::clearScreen(bool applyRainbowEffect, float deltaTime) {
         SDL_SetRenderDrawColor(renderer, r, g, b, 0xFF);
     }
     else {
-        SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xFF);  // Black background
+        resetColor();
     }
     SDL_RenderClear(renderer);
 }
@@ -59,13 +59,13 @@ void Renderer::setColorByIndex(int index, Uint8& r, Uint8& g, Uint8& b) {
 
 
 void Renderer::renderPlayer(float x, float y) {
-    resetColor();
+    SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
     SDL_Rect fillRect = { static_cast<int>(x), static_cast<int>(y), 50, 50 };
     SDL_RenderFillRect(renderer, &fillRect);
 }
 
 void Renderer::resetColor() {
-    SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+    SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xFF);
 }
 
 void Renderer::presentScreen() {

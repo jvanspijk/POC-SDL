@@ -1,9 +1,10 @@
 #include "InputHandler.h"
+#include <iostream>
 
 InputHandler::InputHandler(AudioManager* audioManager)
     : audioManager(audioManager), isLayer2Active(false) {}
 
-void InputHandler::handleInput(bool& quit, bool& moveUp, bool& moveDown, bool& moveLeft, bool& moveRight, bool& space) {
+void InputHandler::handleInput(bool& quit, bool& moveUp, bool& moveDown, bool& moveLeft, bool& moveRight, bool& space, float& timeScale) {
     SDL_Event e;
     while (SDL_PollEvent(&e) != 0) {
         if (e.type == SDL_QUIT) {
@@ -15,7 +16,9 @@ void InputHandler::handleInput(bool& quit, bool& moveUp, bool& moveDown, bool& m
             case SDLK_s: moveDown = true; break;
             case SDLK_a: moveLeft = true; break;
             case SDLK_d: moveRight = true; break;
-            case SDLK_SPACE: space = !space; break;  
+            case SDLK_SPACE: space = !space; break;
+            case SDLK_PAGEUP: timeScale += 0.25f; std::cout << "time scale: " << timeScale << std::endl; break;
+            case SDLK_PAGEDOWN: timeScale -= 0.25f; std::cout << "time scale: " << timeScale << std::endl; break;
             }
         }
         else if (e.type == SDL_KEYUP) {

@@ -8,7 +8,7 @@ public:
     Renderer(SDL_Window* window);
     ~Renderer();
 
-    void clearScreen(bool applyRainbowEffect, float deltaTime);
+    void clearScreen(bool applyRainbowEffect, float deltaTime, float bpm);
     void renderPlayer(float x, float y);
     void presentScreen();
     void renderRainbowEffect(float x, float y, float deltaTime);
