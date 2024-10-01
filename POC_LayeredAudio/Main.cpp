@@ -38,7 +38,7 @@ int main(int argc, char* args[]) {
 
     const int playerStartX = 400;
     const int playerStartY = 300;
-    const float playerSpeed = 4.0f;
+    const float playerSpeed = 250.0f;
     Player player(playerStartX, playerStartY, playerSpeed);
 
     //Passing raw pointers... yeah.
