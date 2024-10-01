@@ -24,7 +24,7 @@ void GameLoop::run() {
         renderer->renderPlayer(player->getX(), player->getY());
         renderer->presentScreen();
 
-        const float desiredBaseVolume = adaptiveMode ? 1.0f : 0.9f;
+        const float desiredBaseVolume = adaptiveMode ? 1.0f : 0.8f;
         const float desiredIntensityVolume = adaptiveMode ? 1.0f : 0.0f;
 
         // Change volume only if it has changed

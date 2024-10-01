@@ -21,8 +21,6 @@ int main(int argc, char* args[]) {
     }
 
     Renderer renderer(window);
-    const int amountOfAudioChannels = 8;
-    const int baseFrequency = 44100;
 
     AudioManager audioManager;    
 
