@@ -17,14 +17,14 @@ void GameLoop::run() {
     Uint32 lastTime = SDL_GetTicks();
     while (!quit) {
         Uint32 currentTime = SDL_GetTicks();
-        float deltaTime = ((currentTime - lastTime) / 1000.0f);
+        float deltaTime = ((currentTime - lastTime) / 1000.0f) * timeScale;
         lastTime = currentTime;
 
         renderer->clearScreen(adaptiveMode, deltaTime, bpm * timeScale);
         renderer->renderPlayer(player->getX(), player->getY());
         renderer->presentScreen();
 
-        const float desiredBaseVolume = adaptiveMode ? 1.0f : 0.8f;
+        const float desiredBaseVolume = adaptiveMode ? 1.0f : 0.75f;
         const float desiredIntensityVolume = adaptiveMode ? 1.0f : 0.0f;
 
         // Change volume only if it has changed

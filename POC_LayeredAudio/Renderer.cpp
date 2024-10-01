@@ -23,7 +23,7 @@ void Renderer::clearScreen(bool applyRainbowEffect, float deltaTime, float bpm) 
 
         // Change color every beat (based on BPM)        
         const float timePerBeat = 60.0f / bpm;
-        const float tolerance = timePerBeat * 0.03f;  // 3% tolerance
+        const float tolerance = timePerBeat * 0.01f;  // 1% tolerance
 
         if (elapsedTime >= (timePerBeat - tolerance)) {
             elapsedTime = 0.0f;
