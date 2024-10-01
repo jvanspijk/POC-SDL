@@ -6,8 +6,6 @@
 
 class InputHandler {
 public:
-    InputHandler(AudioManager* audioManager);
-
     void handleInput(bool& quit, bool& moveUp, bool& moveDown, bool& moveLeft, bool& moveRight, bool& space, float& timeScale);
 
 private:

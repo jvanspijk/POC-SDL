@@ -1,26 +1,30 @@
-#ifndef AUDIO_MANAGER_H
-#define AUDIO_MANAGER_H
-
-#include <SDL2/SDL_mixer.h>
+#pragma once
+#include <AL/al.h>
+#include <AL/alc.h>
 #include <string>
-#include <map>
 
 class AudioManager {
 public:
-    AudioManager(int channels, int frequency);
+    AudioManager();
     ~AudioManager();
 
-    bool loadSoundEffect(const std::string& filePath, const std::string& id);
-    void playSoundEffect(const std::string& id, int amountOfLoops);
-    void fadeIn(const std::string& id, float fadeInSeconds);
-    void fadeOut(const std::string& id, float fadeOutSeconds);
-    void mute(const std::string& id);
-    void close();
-    std::map<std::string, int> playingChannels;
+    void loadMusic(const std::string& baseTrack, const std::string& intensityTrack);
+    void playMusic();
+    void pauseMusic();
+    void stopMusic();
 
+    void setVolume(float volumeBase, float volumeIntensity);
+    void setSpeed(float speedMultiplier);
 private:
-    std::map<std::string, Mix_Chunk*> soundEffects;
-    void fadeVolume(int channel, int startVolume, int endVolume, int fadeDurationSeconds);
-};
+    ALuint baseSource;         
+    ALuint intensitySource;    
+    ALuint baseBuffer;       
+    ALuint intensityBuffer; 
 
-#endif
+    float currentPlaybackSpeed;        
+    bool isPlaying;
+    ALCdevice* device;         
+    ALCcontext* context;      
+
+    void LoadBuffer(ALuint& buffer, const std::string& filename);       
+};

@@ -8,7 +8,12 @@ void GameLoop::run() {
     bool moveUp = false, moveDown = false, moveLeft = false, moveRight = false, adaptiveMode = false;
     float bpm = 108.0f;
     float timeScale = 1.0f;
-    
+
+    float lastBaseVolume = 0.0f;     
+    float lastIntensityVolume = 0.0f;
+
+    float lastPlaybackSpeed = 1.0f;
+
     Uint32 lastTime = SDL_GetTicks();
     while (!quit) {
         Uint32 currentTime = SDL_GetTicks();
@@ -19,12 +24,23 @@ void GameLoop::run() {
         renderer->renderPlayer(player->getX(), player->getY());
         renderer->presentScreen();
 
-        if (adaptiveMode) {
-            audioManager->fadeIn("layer2", 1);
+        const float desiredBaseVolume = adaptiveMode ? 1.0f : 0.9f;
+        const float desiredIntensityVolume = adaptiveMode ? 1.0f : 0.0f;
+
+        // Change volume only if it has changed
+        if (desiredBaseVolume != lastBaseVolume || desiredIntensityVolume != lastIntensityVolume) {
+            audioManager->setVolume(desiredBaseVolume, desiredIntensityVolume);
+            lastBaseVolume = desiredBaseVolume; 
+            lastIntensityVolume = desiredIntensityVolume;
         }
-        else {
-            audioManager->fadeOut("layer2", 1);
-        }        
+
+        float desiredPlaybackSpeed = timeScale;
+
+        // Set playback speed only if it has changed
+        if (desiredPlaybackSpeed != lastPlaybackSpeed) {
+            audioManager->setSpeed(desiredPlaybackSpeed);
+            lastPlaybackSpeed = desiredPlaybackSpeed; 
+        }
 
         inputHandler->handleInput(quit, moveUp, moveDown, moveLeft, moveRight, adaptiveMode, timeScale);
         player->updatePosition(moveUp, moveDown, moveLeft, moveRight, deltaTime);

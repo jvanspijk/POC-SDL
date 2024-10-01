@@ -14,7 +14,7 @@ int main(int argc, char* args[]) {
     const int width = 1366;
     const int height = 768;
 
-    window = SDL_CreateWindow("Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN);
+    window = SDL_CreateWindow("Press the spacebar for an epilepsy attack (PGUP and PGDOWN control speed)", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN);
 
     if (window == nullptr) {
         return -1;
@@ -24,31 +24,22 @@ int main(int argc, char* args[]) {
     const int amountOfAudioChannels = 8;
     const int baseFrequency = 44100;
 
-    AudioManager audioManager(amountOfAudioChannels, baseFrequency);
-    
-    //SDL mixer does not support playing two music tracks simultaneosly
-    //We load it in as 2 soundeffects as a hacky workaround
-    audioManager.loadSoundEffect("Synthwave_layer1.ogg", "layer1");
-    audioManager.loadSoundEffect("Synthwave_layer2.ogg", "layer2");
-    audioManager.playSoundEffect("layer1", -1);
-    audioManager.playSoundEffect("layer2", -1);
-    audioManager.mute("layer1");
-    audioManager.mute("layer2");
-    audioManager.fadeIn("layer1", 2.0f); //Fade in does not work, neither does fadeout..
+    AudioManager audioManager;    
 
-    //Ugly to pass audiomanager as a dependency for inputhandler but it will have to do for now
-    InputHandler inputHandler(&audioManager);
+    audioManager.loadMusic("Synthwave_layer1.ogg", "Synthwave_layer2.ogg");
+    audioManager.playMusic();
+    audioManager.setVolume(1.0f, 0.0f);
+
+    InputHandler inputHandler;
 
     const int playerStartX = 400;
     const int playerStartY = 300;
     const float playerSpeed = 250.0f;
     Player player(playerStartX, playerStartY, playerSpeed);
 
-    //Passing raw pointers... yeah.
     GameLoop gameLoop(&audioManager, &renderer, &inputHandler, &player);
     gameLoop.run();
 
-    audioManager.close();
     SDL_DestroyWindow(window);
     SDL_Quit();
 

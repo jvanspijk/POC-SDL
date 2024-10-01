@@ -1,5 +1,8 @@
 {
   "dependencies": [
-    "sdl2-mixer"
+    "libogg",
+    "libvorbis",
+    "openal-soft",
+    "sdl2"
   ]
 }
