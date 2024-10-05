@@ -1,34 +1,31 @@
+#define SDL_MAIN_HANDLED
 #include <iostream>
 #include <string>
-#include "WorldBuilder.h"
-#include "EntityManager.h"
+#include "InputManager.h"
+#include "SDLInputBinding.h"
 
-void runGameLoop()
+void initializeInputBindings()
 {
-    std::cin;
+    InputManager& inputManager = InputManager::getInstance();
+
+    inputManager.bindAction("Jump", std::make_unique<SDLInputBinding>("Jump", SDLK_SPACE));
+    inputManager.bindAction("MoveLeft", std::make_unique<SDLInputBinding>("MoveLeft", SDLK_a));
+    inputManager.bindAction("MoveRight", std::make_unique<SDLInputBinding>("MoveRight", SDLK_d));
+    inputManager.bindAction("Crouch", std::make_unique<SDLInputBinding>("Crouch", SDLK_LCTRL));
 }
 
-void run(std::string level[])
-{
-    EntityManager manager;
-    WorldBuilder builder(manager);
-    builder.createLevel(level);
+void createEntity() {
 
-    runGameLoop();
 }
 
-//TODO: stuck at 9 mins of components basis
-int main()
+int main(int argc, char* args[])
 {
-    std::cout << "test1" << std::endl;
-    std::string level[] = {
-        "#######",
-        "#@----#",
-        "#####-#",
-        "#-----#",
-        "#-#####",
-        "#-----#",
-        "#######"
-    };
-    run(level);
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) < 0)
+    {
+        return -1;
+    }
+
+    initializeInputBindings();
+
+    SDL_Quit();
 }

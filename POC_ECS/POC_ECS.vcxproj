@@ -130,22 +130,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BlockingComponent.cpp" />
-    <ClCompile Include="ComponentTypeRegistry.h" />
-    <ClCompile Include="DrawableComponent.cpp" />
-    <ClCompile Include="EntityComponent.cpp" />
+    <ClCompile Include="Behavior.cpp" />
     <ClCompile Include="EntityManager.cpp" />
-    <ClCompile Include="LocationComponent.cpp" />
+    <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Program.cpp" />
-    <ClCompile Include="WorldBuilder.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BlockingComponent.h" />
-    <ClInclude Include="DrawableComponent.h" />
-    <ClInclude Include="EntityComponent.h" />
+    <ClInclude Include="Behavior.h" />
+    <ClInclude Include="Component.h" />
+    <ClInclude Include="ComponentManager.h" />
+    <ClInclude Include="ComponentType.h" />
+    <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityManager.h" />
-    <ClInclude Include="LocationComponent.h" />
-    <ClInclude Include="WorldBuilder.h" />
+    <ClInclude Include="InputManager.h" />
+    <ClInclude Include="IInputBinding.h" />
+    <ClInclude Include="PositionComponentManager.h" />
+    <ClInclude Include="SDLInputBinding.h" />
+    <ClInclude Include="SDLInputManager.h" />
+    <ClInclude Include="Position.h" />
+    <ClInclude Include="System.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
