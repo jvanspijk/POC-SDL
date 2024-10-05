@@ -36,7 +36,6 @@ public:
 		//Is possible but who cares
 	}
 private:
-	std::vector<Position> _positionComponents;
 	std::vector<Behavior> _behaviorComponents;
 
 	std::unordered_map<int, std::vector<Component&>> componentsPerEntity;

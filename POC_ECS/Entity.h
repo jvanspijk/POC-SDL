@@ -10,13 +10,3 @@ public:
     unsigned int id;
 };
 #endif // ENTITY_H
-
-
-class GameObject {
-public:
-    GameObject(unsigned int id) : id(id) {}
-    unsigned int id;
-
-    virtual void onUpdate() = 0;
-
-};

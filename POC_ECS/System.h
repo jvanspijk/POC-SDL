@@ -5,10 +5,10 @@
 
 class System {
 protected:
-    IComponentManager& componentManager;
+    ComponentManager& componentManager;
 
 public:
-    explicit System(IComponentManager& manager) : componentManager(manager) {}
+    explicit System(ComponentManager& manager) : componentManager(manager) {}
     virtual void update() = 0;
 };
 

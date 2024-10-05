@@ -4,13 +4,9 @@
 
 class Component {
 public:
-    ComponentType type;
-
-    Component() {
-        hasChanged = false;
-    }
-
-    bool hasChanged; //This will be handy for some components to skip other components like the renderer    
+    void onStart();
+    void onUpdate();
+    bool active;
 };
 
 #endif
