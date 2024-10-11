@@ -132,14 +132,15 @@
   <ItemGroup>
     <ClCompile Include="AudioChannel.cpp" />
     <ClCompile Include="AudioManager.cpp" />
-    <ClCompile Include="OpenALAudioManager.cpp" />
+    <ClCompile Include="OpenALPlayer.cpp" />
     <ClCompile Include="Program.cpp" />
     <ClCompile Include="SoundResource.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AudioChannel.h" />
     <ClInclude Include="AudioManager.h" />
-    <ClInclude Include="OpenALAudioManager.h" />
+    <ClInclude Include="IAudioPlayer.h" />
+    <ClInclude Include="OpenALPlayer.h" />
     <ClInclude Include="SoundResource.h" />
     <ClInclude Include="StreamingAudioData.h" />
   </ItemGroup>

@@ -33,7 +33,7 @@
     <ClCompile Include="SoundResource.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="OpenALAudioManager.cpp">
+    <ClCompile Include="OpenALPlayer.cpp">
       <Filter>Source Files\OpenAL</Filter>
     </ClCompile>
   </ItemGroup>
@@ -50,8 +50,11 @@
     <ClInclude Include="StreamingAudioData.h">
       <Filter>Header Files\OpenAL</Filter>
     </ClInclude>
-    <ClInclude Include="OpenALAudioManager.h">
+    <ClInclude Include="OpenALPlayer.h">
       <Filter>Header Files\OpenAL</Filter>
+    </ClInclude>
+    <ClInclude Include="IAudioPlayer.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

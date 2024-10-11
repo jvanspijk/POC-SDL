@@ -3,10 +3,7 @@
 #include "StreamingAudioData.h"
 #include "IAudioPlayer.h"
 
-#define alCall(function, ...) alCallImpl(__FILE__, __LINE__, function, __VA_ARGS__)
-#define alcCall(function, device, ...) alcCallImpl(__FILE__, __LINE__, function, device, __VA_ARGS__)
-
-class OpenALPlayer : IAudioPlayer
+class OpenALPlayer : public IAudioPlayer
 {
 public:
     OpenALPlayer();
@@ -18,13 +15,24 @@ public:
     void Pause() override;
     void ChangePitch(float pitchFactor) override;
     void ChangeSpeed(float speedFactor) override;
+    void Update();
+
 private:
-	void check_al_errors(const std::string& filename, const std::uint_fast32_t line);
+    StreamingAudioData _audioData;
     bool create_stream_from_file(const std::string& filename, StreamingAudioData& audioData);
     void play_stream(const StreamingAudioData& audioData);
     void update_stream(StreamingAudioData& audioData);
     void stop_stream(const StreamingAudioData& audioData);
 
+    //Should maybe be in the manager instead
+    ALCdevice* _device;
+    ALCcontext* _context;
+
+    //The following functions will act as wrappers around any OpenAL function calls and automatically check for errors.
+    #define alCall(function, ...) alCallImpl(__FILE__, __LINE__, function, __VA_ARGS__)
+    #define alcCall(function, device, ...) alcCallImpl(__FILE__, __LINE__, function, device, __VA_ARGS__)
+
+    void check_al_errors(const std::string& filename, const std::uint_fast32_t line);
 
     template<typename alFunction, typename... Params>
     auto alCallImpl(const char* filename, const std::uint_fast32_t line, alFunction function, Params... params)

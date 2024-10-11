@@ -1,6 +1,63 @@
 #include "OpenALPlayer.h"
 #include <iostream>
+#include <vector>
 
+bool OpenALPlayer::Load(const std::string& filepath) {
+    std::cout << "Loading OGG file with OpenAL: " << filepath << std::endl;
+    if (!create_stream_from_file(filepath, _audioData)) {
+        std::cout << "Loading failed" << std::endl;
+        return false;
+    }
+    return true;
+}
+
+void OpenALPlayer::Play(int loops) {
+    play_stream(_audioData);
+}
+
+void OpenALPlayer::Update() {
+    update_stream(_audioData);
+}
+
+void OpenALPlayer::Stop() {
+    stop_stream(_audioData);
+}
+
+void OpenALPlayer::Pause() {
+    // Implement OpenAL pause logic
+}
+
+void OpenALPlayer::ChangePitch(float pitchFactor) {
+    // Implement OpenAL pitch changing logic
+}
+
+void OpenALPlayer::ChangeSpeed(float speedFactor) {
+    // Implement OpenAL speed changing logic
+}
+
+OpenALPlayer::OpenALPlayer() {
+    std::cout << "constructor called" << std::endl;
+    _device = alcOpenDevice(nullptr); // Open default device
+    if (!_device) {
+        std::cerr << "Failed to open OpenAL device" << std::endl;
+        return;
+    }
+
+    _context = alcCreateContext(_device, nullptr);
+    alcMakeContextCurrent(_context);
+    if (!_context) {
+        std::cerr << "Failed to create OpenAL context" << std::endl;
+        return;
+    }
+}
+
+OpenALPlayer::~OpenALPlayer() {
+    alcMakeContextCurrent(nullptr);
+    alcDestroyContext(_context);
+    alcCloseDevice(_device);
+}
+
+//-----------------------------------------------------------------------------//
 //Deckhead, (2020, January 16). C++, Game Dev, Game Engine Dev.
 //https://indiegamedev.net/2020/01/16/how-to-stream-ogg-files-with-openal-in-c/
 
@@ -53,7 +110,7 @@ static std::size_t read_ogg_callback(void* destination, std::size_t size1, std::
         }
     }
 
-    char* moreData = new char[length];
+    std::vector<char> moreData(length);
 
     audioData->file.clear();
     audioData->file.seekg(audioData->sizeConsumed);
@@ -79,8 +136,6 @@ static std::size_t read_ogg_callback(void* destination, std::size_t size1, std::
     audioData->sizeConsumed += length;
 
     std::memcpy(destination, &moreData[0], length);
-
-    delete[] moreData;
 
     audioData->file.clear();
 
@@ -135,10 +190,10 @@ bool OpenALPlayer::create_stream_from_file(const std::string& filename, Streamin
         std::cerr << "ERROR: couldn't open file" << std::endl;
         return 0;
     }
-
+    std::cout << "initializing audioData..." << std::endl;
     audioData.file.seekg(0, std::ios_base::beg);
     audioData.file.ignore(std::numeric_limits<std::streamsize>::max());
-    audioData.size = audioData.file.tellg();
+    audioData.size = audioData.file.gcount();
     audioData.file.clear();
     audioData.file.seekg(0, std::ios_base::beg);
     audioData.sizeConsumed = 0;
@@ -188,7 +243,7 @@ bool OpenALPlayer::create_stream_from_file(const std::string& filename, Streamin
         return false;
     }
 
-    char* data = new char[BUFFER_SIZE];
+    std::vector<char> data(BUFFER_SIZE);
 
     for (std::uint8_t i = 0; i < NUM_BUFFERS; ++i)
     {
@@ -220,6 +275,7 @@ bool OpenALPlayer::create_stream_from_file(const std::string& filename, Streamin
             dataSoFar += result;
         }
 
+        std::cout << "setting format..." << std::endl;
         if (audioData.channels == 1 && audioData.bitsPerSample == 8)
             audioData.format = AL_FORMAT_MONO8;
         else if (audioData.channels == 1 && audioData.bitsPerSample == 16)
@@ -231,22 +287,22 @@ bool OpenALPlayer::create_stream_from_file(const std::string& filename, Streamin
         else
         {
             std::cerr << "ERROR: unrecognised ogg format: " << audioData.channels << " channels, " << audioData.bitsPerSample << " bps" << std::endl;
-            delete[] data;
             return false;
         }
 
-        alCall(alBufferData, audioData.buffers[i], audioData.format, data, dataSoFar, audioData.sampleRate);
+        alCall(alBufferData, audioData.buffers[i], audioData.format, data.data(), dataSoFar, audioData.sampleRate);
     }
 
     alCall(alSourceQueueBuffers, audioData.source, NUM_BUFFERS, &audioData.buffers[0]);
 
-    delete[] data;
+    std::cout << "Deleting data..." << std::endl;
 
     return true;
 }
 
 void OpenALPlayer::play_stream(const StreamingAudioData& audioData)
 {
+    std::cout << "Playing stream..." << std::endl;
     alCall(alSourceStop, audioData.source);
     alCall(alSourcePlay, audioData.source);
 }
@@ -342,29 +398,5 @@ void OpenALPlayer::stop_stream(const StreamingAudioData& audioData)
     alCall(alSourceStop, audioData.source);
 }
 
-bool OpenALPlayer::Load(const std::string& filepath) {
-    // Load OGG file using your earlier implementation
-    std::cout << "Loading OGG file with OpenAL: " << filepath << std::endl;
-    // Return true on success, false on failure
-    return true;
-}
+//-----------------------------------------------------------------------------//
 
-void OpenALPlayer::Play(int loops) {
-    // Implement OpenAL play logic
-}
-
-void OpenALPlayer::Stop() {
-    // Implement OpenAL stop logic
-}
-
-void OpenALPlayer::Pause() {
-    // Implement OpenAL pause logic
-}
-
-void OpenALPlayer::ChangePitch(float pitchFactor) {
-    // Implement OpenAL pitch changing logic
-}
-
-void OpenALPlayer::ChangeSpeed(float speedFactor) {
-    // Implement OpenAL speed changing logic
-}
