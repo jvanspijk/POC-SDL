@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="AudioChannel">
+    <Position X="9" Y="4.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAoAAAIAAAAQAAAAABMAAAQAAQAAAAAoAAAgAIAEBA=</HashCode>
+      <FileName>AudioChannel.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AudioManager">
+    <Position X="12.5" Y="4.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAQAAAAAAIAAAQAAAAAAAAAAAVAICABAA=</HashCode>
+      <FileName>AudioManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SoundResource">
+    <Position X="18.5" Y="5.25" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACChAAAAQYAIAAAAAAAAAAAhBAAAAAAAACAAAA=</HashCode>
+      <FileName>SoundResource.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IAudioPlayer">
+    <Position X="5.25" Y="1.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAggAAAAAAAQAAAAAIAAAAQAAAAAAAAoAAAAAAAAAA=</HashCode>
+      <FileName>IAudioPlayer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OpenALPlayer">
+    <Position X="4.75" Y="4.25" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>BAQggAQCAAAARAAAAQAAAEARAAAAgAAQoAEAAAAAAAA=</HashCode>
+      <FileName>OpenALPlayer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="StreamingAudioData">
+    <Position X="0.75" Y="4.25" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAZAAAAAAAIAAIAACAACCAAAAAAABABQAAAAAEA=</HashCode>
+      <FileName>StreamingAudioData.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
