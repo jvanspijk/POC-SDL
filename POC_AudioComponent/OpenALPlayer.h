@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include "StreamingAudioData.h"
+#include "OpenALAudioResource.h"
 #include "IAudioPlayer.h"
 
 class OpenALPlayer : public IAudioPlayer
@@ -18,11 +18,11 @@ public:
     void Update();
 
 private:
-    StreamingAudioData _audioData;
-    bool create_stream_from_file(const std::string& filename, StreamingAudioData& audioData);
-    void play_stream(const StreamingAudioData& audioData);
-    void update_stream(StreamingAudioData& audioData);
-    void stop_stream(const StreamingAudioData& audioData);
+    OpenALAudioResource _audioData;
+    bool create_stream_from_file(const std::string& filename, OpenALAudioResource& audioData);
+    void play_stream(const OpenALAudioResource& audioData);
+    void update_stream(OpenALAudioResource& audioData);
+    void stop_stream(const OpenALAudioResource& audioData);
 
     //Should maybe be in the manager instead
     ALCdevice* _device;

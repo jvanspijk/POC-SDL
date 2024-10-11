@@ -47,7 +47,7 @@
     <ClInclude Include="SoundResource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="StreamingAudioData.h">
+    <ClInclude Include="OpenALAudioResource.h">
       <Filter>Header Files\OpenAL</Filter>
     </ClInclude>
     <ClInclude Include="OpenALPlayer.h">

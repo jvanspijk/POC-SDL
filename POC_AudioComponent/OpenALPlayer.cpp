@@ -93,43 +93,43 @@ void OpenALPlayer::check_al_errors(const std::string& filename, const std::uint_
 
 static std::size_t read_ogg_callback(void* destination, std::size_t size1, std::size_t size2, void* fileHandle)
 {
-    StreamingAudioData* audioData = reinterpret_cast<StreamingAudioData*>(fileHandle);
+    OpenALAudioResource* audioData = reinterpret_cast<OpenALAudioResource*>(fileHandle);
 
     ALsizei length = size1 * size2;
 
     if (audioData->sizeConsumed + length > audioData->size)
         length = audioData->size - audioData->sizeConsumed;
 
-    if (!audioData->file.is_open())
+    if (!audioData->resource.file.is_open())
     {
-        audioData->file.open(audioData->filename, std::ios::binary);
-        if (!audioData->file.is_open())
+        audioData->resource.file.open(audioData->resource.filename, std::ios::binary);
+        if (!audioData->resource.file.is_open())
         {
-            std::cerr << "ERROR: Could not re-open streaming file \"" << audioData->filename << "\"" << std::endl;
+            std::cerr << "ERROR: Could not re-open streaming file \"" << audioData->resource.filename << "\"" << std::endl;
             return 0;
         }
     }
 
     std::vector<char> moreData(length);
 
-    audioData->file.clear();
-    audioData->file.seekg(audioData->sizeConsumed);
-    if (!audioData->file.read(&moreData[0], length))
+    audioData->resource.file.clear();
+    audioData->resource.file.seekg(audioData->sizeConsumed);
+    if (!audioData->resource.file.read(&moreData[0], length))
     {
-        if (audioData->file.eof())
+        if (audioData->resource.file.eof())
         {
-            audioData->file.clear(); // just clear the error, we will resolve it later
+            audioData->resource.file.clear(); // just clear the error, we will resolve it later
         }
-        else if (audioData->file.fail())
+        else if (audioData->resource.file.fail())
         {
-            std::cerr << "ERROR: OGG stream has fail bit set " << audioData->filename << std::endl;
-            audioData->file.clear();
+            std::cerr << "ERROR: OGG stream has fail bit set " << audioData->resource.filename << std::endl;
+            audioData->resource.file.clear();
             return 0;
         }
-        else if (audioData->file.bad())
+        else if (audioData->resource.file.bad())
         {
-            perror(("ERROR: OGG stream has bad bit set " + audioData->filename).c_str());
-            audioData->file.clear();
+            perror(("ERROR: OGG stream has bad bit set " + audioData->resource.filename).c_str());
+            audioData->resource.file.clear();
             return 0;
         }
     }
@@ -137,14 +137,14 @@ static std::size_t read_ogg_callback(void* destination, std::size_t size1, std::
 
     std::memcpy(destination, &moreData[0], length);
 
-    audioData->file.clear();
+    audioData->resource.file.clear();
 
     return length;
 }
 
 static std::int32_t seek_ogg_callback(void* fileHandle, ogg_int64_t to, std::int32_t type)
 {
-    StreamingAudioData* audioData = reinterpret_cast<StreamingAudioData*>(fileHandle);
+    OpenALAudioResource* audioData = reinterpret_cast<OpenALAudioResource*>(fileHandle);
 
     if (type == SEEK_CUR)
     {
@@ -177,25 +177,24 @@ static std::int32_t seek_ogg_callback(void* fileHandle, ogg_int64_t to, std::int
 
 static long int tell_ogg_callback(void* fileHandle)
 {
-    StreamingAudioData* audioData = reinterpret_cast<StreamingAudioData*>(fileHandle);
+    OpenALAudioResource* audioData = reinterpret_cast<OpenALAudioResource*>(fileHandle);
     return audioData->sizeConsumed;
 }
 
-bool OpenALPlayer::create_stream_from_file(const std::string& filename, StreamingAudioData& audioData)
+bool OpenALPlayer::create_stream_from_file(const std::string& filename, OpenALAudioResource& audioData)
 {
-    audioData.filename = filename;
-    audioData.file.open(filename, std::ios::binary);
-    if (!audioData.file.is_open())
+    audioData.resource.filename = filename;
+    audioData.resource.file.open(filename, std::ios::binary);
+    if (!audioData.resource.file.is_open())
     {
         std::cerr << "ERROR: couldn't open file" << std::endl;
         return 0;
     }
-    std::cout << "initializing audioData..." << std::endl;
-    audioData.file.seekg(0, std::ios_base::beg);
-    audioData.file.ignore(std::numeric_limits<std::streamsize>::max());
-    audioData.size = audioData.file.gcount();
-    audioData.file.clear();
-    audioData.file.seekg(0, std::ios_base::beg);
+    audioData.resource.file.seekg(0, std::ios_base::beg);
+    audioData.resource.file.ignore(std::numeric_limits<std::streamsize>::max());
+    audioData.size = audioData.resource.file.gcount();
+    audioData.resource.file.clear();
+    audioData.resource.file.seekg(0, std::ios_base::beg);
     audioData.sizeConsumed = 0;
 
     ov_callbacks oggCallbacks;
@@ -212,14 +211,13 @@ bool OpenALPlayer::create_stream_from_file(const std::string& filename, Streamin
 
     vorbis_info* vorbisInfo = ov_info(&audioData.oggVorbisFile, -1);
 
-    audioData.channels = vorbisInfo->channels;
+    audioData.resource.channels = vorbisInfo->channels;
     audioData.bitsPerSample = 16;
-    audioData.sampleRate = vorbisInfo->rate;
-    audioData.duration = ov_time_total(&audioData.oggVorbisFile, -1);
+    audioData.resource.sampleRate = vorbisInfo->rate;
+    audioData.resource.duration = ov_time_total(&audioData.oggVorbisFile, -1);
 
     alCall(alGenSources, 1, &audioData.source);
     alCall(alSourcef, audioData.source, AL_PITCH, 1);
-    //assuming default gain is 1.0f
     alCall(alSourcef, audioData.source, AL_GAIN, 1.0);
     alCall(alSource3f, audioData.source, AL_POSITION, 0, 0, 0);
     alCall(alSource3f, audioData.source, AL_VELOCITY, 0, 0, 0);
@@ -227,17 +225,17 @@ bool OpenALPlayer::create_stream_from_file(const std::string& filename, Streamin
 
     alCall(alGenBuffers, NUM_BUFFERS, &audioData.buffers[0]);
 
-    if (audioData.file.eof())
+    if (audioData.resource.file.eof())
     {
         std::cerr << "ERROR: Already reached EOF without loading data" << std::endl;
         return false;
     }
-    else if (audioData.file.fail())
+    else if (audioData.resource.file.fail())
     {
         std::cerr << "ERROR: Fail bit set" << std::endl;
         return false;
     }
-    else if (!audioData.file)
+    else if (!audioData.resource.file)
     {
         std::cerr << "ERROR: file is false" << std::endl;
         return false;
@@ -276,38 +274,36 @@ bool OpenALPlayer::create_stream_from_file(const std::string& filename, Streamin
         }
 
         std::cout << "setting format..." << std::endl;
-        if (audioData.channels == 1 && audioData.bitsPerSample == 8)
+        if (audioData.resource.channels == 1 && audioData.bitsPerSample == 8)
             audioData.format = AL_FORMAT_MONO8;
-        else if (audioData.channels == 1 && audioData.bitsPerSample == 16)
+        else if (audioData.resource.channels == 1 && audioData.bitsPerSample == 16)
             audioData.format = AL_FORMAT_MONO16;
-        else if (audioData.channels == 2 && audioData.bitsPerSample == 8)
+        else if (audioData.resource.channels == 2 && audioData.bitsPerSample == 8)
             audioData.format = AL_FORMAT_STEREO8;
-        else if (audioData.channels == 2 && audioData.bitsPerSample == 16)
+        else if (audioData.resource.channels == 2 && audioData.bitsPerSample == 16)
             audioData.format = AL_FORMAT_STEREO16;
         else
         {
-            std::cerr << "ERROR: unrecognised ogg format: " << audioData.channels << " channels, " << audioData.bitsPerSample << " bps" << std::endl;
+            std::cerr << "ERROR: unrecognised ogg format: " << audioData.resource.channels << " channels, " << audioData.bitsPerSample << " bps" << std::endl;
             return false;
         }
 
-        alCall(alBufferData, audioData.buffers[i], audioData.format, data.data(), dataSoFar, audioData.sampleRate);
+        alCall(alBufferData, audioData.buffers[i], audioData.format, data.data(), dataSoFar, audioData.resource.sampleRate);
     }
 
     alCall(alSourceQueueBuffers, audioData.source, NUM_BUFFERS, &audioData.buffers[0]);
 
-    std::cout << "Deleting data..." << std::endl;
-
     return true;
 }
 
-void OpenALPlayer::play_stream(const StreamingAudioData& audioData)
+void OpenALPlayer::play_stream(const OpenALAudioResource& audioData)
 {
     std::cout << "Playing stream..." << std::endl;
     alCall(alSourceStop, audioData.source);
     alCall(alSourcePlay, audioData.source);
 }
 
-void OpenALPlayer::update_stream(StreamingAudioData& audioData)
+void OpenALPlayer::update_stream(OpenALAudioResource& audioData)
 {
     ALint buffersProcessed = 0;
     alCall(alGetSourcei, audioData.source, AL_BUFFERS_PROCESSED, &buffersProcessed);
@@ -372,7 +368,7 @@ void OpenALPlayer::update_stream(StreamingAudioData& audioData)
 
         if (dataSizeToBuffer > 0)
         {
-            alCall(alBufferData, buffer, audioData.format, data, dataSizeToBuffer, audioData.sampleRate);
+            alCall(alBufferData, buffer, audioData.format, data, dataSizeToBuffer, audioData.resource.sampleRate);
             alCall(alSourceQueueBuffers, audioData.source, 1, &buffer);
         }
 
@@ -393,7 +389,7 @@ void OpenALPlayer::update_stream(StreamingAudioData& audioData)
     }
 }
 
-void OpenALPlayer::stop_stream(const StreamingAudioData& audioData)
+void OpenALPlayer::stop_stream(const OpenALAudioResource& audioData)
 {
     alCall(alSourceStop, audioData.source);
 }

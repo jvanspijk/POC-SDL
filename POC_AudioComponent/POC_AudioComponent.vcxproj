@@ -142,7 +142,7 @@
     <ClInclude Include="IAudioPlayer.h" />
     <ClInclude Include="OpenALPlayer.h" />
     <ClInclude Include="SoundResource.h" />
-    <ClInclude Include="StreamingAudioData.h" />
+    <ClInclude Include="OpenALAudioResource.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

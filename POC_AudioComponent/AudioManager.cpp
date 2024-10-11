@@ -36,3 +36,7 @@ void AudioManager::ChangeVolume(int id, float volume)
         channels[id]->ChangeVolume(volume);
     }
 }
+
+void AudioManager::LoadFile(std::string path)
+{
+}

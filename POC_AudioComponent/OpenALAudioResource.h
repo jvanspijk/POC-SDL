@@ -4,28 +4,18 @@
 #include <AL/al.h>
 #include <AL/alc.h>
 #include <vorbis/vorbisfile.h>
+#include "SoundResource.h"
 
 constexpr std::size_t NUM_BUFFERS = 4;
 constexpr ALsizei BUFFER_SIZE = 65536; //32kB
 /// <summary>
 /// Resource that holds buffers and file information.
 /// </summary>
-struct StreamingAudioData
+struct OpenALAudioResource
 {
+    SoundResource resource;
     //buffers are loaded into as the previous one is playing. That’s how the streaming works, one buffer is handed off to OpenAL as the previous ones are having the next few milliseconds of audio provided.
     ALuint buffers[NUM_BUFFERS]; 
-
-    //filename is the filename of the original.ogg file.This is used in case the file handle is lost, to continue streaming we need to know which file to re - open.
-    std::string filename;
-
-    //file is the file handle.
-    std::ifstream file;
-
-    //channels are populated when we load the .ogg file. These are needed by OpenAL in order to understand the data being passed to it in the buffers.
-    std::uint8_t channels;
-
-    //sampleRate is populated when we load the .ogg file. These are needed by OpenAL in order to understand the data being passed to it in the buffers.
-    std::int32_t sampleRate;
 
     //bitsPerSample is populated when we load the .ogg file. These are needed by OpenAL in order to understand the data being passed to it in the buffers.
     std::uint8_t bitsPerSample;
@@ -47,7 +37,4 @@ struct StreamingAudioData
 
     //oggCurrentSection is the part of the audio that’s currently being played back.
     std::int_fast32_t oggCurrentSection = 0;
-
-    //The total length of the audio data.
-    std::size_t duration;
 };

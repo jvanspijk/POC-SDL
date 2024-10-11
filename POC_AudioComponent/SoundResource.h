@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <fstream>
 
 class SoundResource {
 public:
@@ -10,12 +11,11 @@ public:
     ~SoundResource();
 
     bool LoadFromFileOGG(const std::string& filepath);
-
-    const std::vector<short>& GetAudioData() const { return _audioData; }
-    int GetSampleRate() const { return _sampleRate; }
-    int GetChannels() const { return _mono ? 1 : 2; }
-    int GetTotalSamples() const { return _totalSamples; }
-
+    std::string filename;
+    std::ifstream file;
+    int32_t sampleRate;
+    uint8_t channels;
+    std::size_t duration;
 private:
     std::vector<short> _audioData;
     std::string _fileName;
